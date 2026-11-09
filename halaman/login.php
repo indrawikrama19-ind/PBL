@@ -1,5 +1,47 @@
 <?php
+// login.php
+session_start();
 
+$error_message = '';
+
+// Data dummy (ganti email/password sesuai kebutuhan)
+$dummy_users = [
+    [
+        'email' => 'mahasiswa@pnj.ac.id',
+        'password' => '123456',
+        'nama' => 'Mahasiswa PKL'
+    ],
+    [
+        'email' => 'admin@pnj.ac.id',
+        'password' => 'admin123',
+        'nama' => 'Admin PKL'
+    ]
+];
+
+// Proses saat form dionklik / di-submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input_email = $_POST['email'] ?? '';
+    $input_password = $_POST['password'] ?? '';
+
+    $login_success = false;
+
+    // Cek inputan ke data dummy
+    foreach ($dummy_users as $user) {
+        if ($user['email'] === $input_email && $user['password'] === $input_password) {
+            $login_success = true;
+            $_SESSION['user'] = $user['nama'];
+            break;
+        }
+    }
+
+    if ($login_success) {
+        // Jika login berhasil, redirect ke halaman dashboard/index
+        header('Location: dashboard_mhsw.php');
+        exit;
+    } else {
+        $error_message = 'Email atau password salah!';
+    }
+}
 ?>
 
 
